@@ -66,7 +66,7 @@ with tab1:
         빈 모서리를 채워 완전한 정사각형을 만들려면, 한 변이 $y$인 **노란색 정사각형($y^2$)**이 필요합니다.
         양변에 $y^2$을 더해주면, 완성된 가장 큰 정사각형의 넓이는 다음과 같습니다.
         
-        $$ (x + y)^2 = y^2 - c $$
+        $$(x + y)^2 = y^2 - c$$
         """)
         
     with col2:
@@ -76,6 +76,17 @@ with tab1:
         # 시각적 비율을 위한 고정 변수 (x를 10이라 가정하고 그림)
         vis_x = 10
         vis_y = y_val * 2 # 시각적으로 y값을 맵핑
+        max_dim = vis_x + vis_y
+        
+        # 투명한 점을 양 끝에 찍어서 Plotly가 자동으로 축 범위를 넉넉하게 잡도록 강제합니다.
+        fig2d.add_trace(go.Scatter(
+            x=[-1, max_dim + 1], 
+            y=[-1, max_dim + 1], 
+            mode="markers", 
+            marker=dict(color="rgba(0,0,0,0)"), 
+            showlegend=False,
+            hoverinfo="skip"
+        ))
         
         # 1. x^2 사각형 (파란색)
         fig2d.add_shape(type="rect", x0=0, y0=0, x1=vis_x, y1=vis_x,
@@ -97,10 +108,10 @@ with tab1:
                         fillcolor="rgba(255, 127, 14, 0.7)", line=dict(color="black", width=2))
         fig2d.add_annotation(x=vis_x+vis_y/2, y=vis_x+vis_y/2, text="<b>y²</b>", showarrow=False, font=dict(size=16, color="white"))
 
-        # 축 및 레이아웃 설정
+        # 축 및 레이아웃 명시적 범위 설정
         fig2d.update_layout(
-            xaxis=dict(showgrid=False, zeroline=False, visible=False, scaleanchor="y", scaleratio=1),
-            yaxis=dict(showgrid=False, zeroline=False, visible=False),
+            xaxis=dict(showgrid=False, zeroline=False, visible=False, scaleanchor="y", scaleratio=1, range=[-1, max_dim + 1]),
+            yaxis=dict(showgrid=False, zeroline=False, visible=False, range=[-1, max_dim + 1]),
             margin=dict(l=10, r=10, t=10, b=10),
             height=400,
             plot_bgcolor="white"
